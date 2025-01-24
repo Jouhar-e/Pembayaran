@@ -1,0 +1,15 @@
+CREATE TABLE transaksi (
+    id_transaksi INT IDENTITY(1,1) PRIMARY KEY, -- Auto-increment menggunakan IDENTITY
+    tanggal_transaksi DATE NOT NULL,
+    nama_pelanggan NVARCHAR(100) NOT NULL, -- Menggunakan NVARCHAR untuk mendukung Unicode
+    total_pembayaran DECIMAL(12,2) NOT NULL
+);
+CREATE TABLE detail_transaksi (
+    id_detail INT IDENTITY(1,1) PRIMARY KEY, -- Auto-increment menggunakan IDENTITY
+    id_transaksi INT NOT NULL, -- Foreign key ke tabel transaksi
+    nama_item NVARCHAR(100) NOT NULL, -- Menggunakan NVARCHAR untuk mendukung Unicode
+    jumlah INT NOT NULL,
+    harga_satuan DECIMAL(12,2) NOT NULL,
+    subtotal AS (jumlah * harga_satuan) PERSISTED, -- Kolom computed untuk subtotal
+    CONSTRAINT FK_Detail_Transaksi FOREIGN KEY (id_transaksi) REFERENCES transaksi(id_transaksi)
+);
